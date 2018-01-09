@@ -11,7 +11,6 @@ $(document).ready(function() {
       charButton.attr("data-person", topics[i]);
       charButton.text(topics[i]);
       $(".buttons").append(charButton);
-      console.log(charButton);
     }
   }
 
@@ -24,8 +23,8 @@ $(document).ready(function() {
 
       // create variable to hold giphy URL
       var name = $(this).attr("data-person");
-      console.log(this);
-      console.log("Searching Giphy for: " + name);
+      // console.log(this);
+      // console.log("Searching Giphy for: " + name);
       var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=mAuau4GXKo9SjuYYPFLo7OsO5KfWXHAb&limit=10"; // the addition of &limit=10 limits the serach parameter to 10 gifs
 
       // create the AJAX call
@@ -44,7 +43,13 @@ $(document).ready(function() {
           var rating = results[j].rating; // store the rating of the gif
           var p = $("<p>").text("Rating: " + rating); // creates a paragraph with rating attached
           var gifImage = $("<img>"); // creates an image tag for the gif result to go into
-          gifImage.attr("src", results[j].images.fixed_height.url);
+          
+          // add a class and attributes for image animation
+          gifImage.addClass("gif");
+          gifImage.attr("src", results[j].images.fixed_height_still.url);
+          gifImage.attr("data-state","still");
+          gifImage.attr("data-still", results[j].images.fixed_height_still.url);
+          gifImage.attr("data-animate", results[j].images.fixed_height.url);
 
           // appends paragraph and gif to the gifDiv
           gifDiv.append(p);
@@ -59,6 +64,20 @@ $(document).ready(function() {
     });
 
   };
+
+  // on click function that changes the gif to animate when clicked and opposite
+  $(".display").on("click", ".gif", function () {
+    var state = $(this).attr("data-state");
+
+    if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+    } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+    }
+
+  });
 
   // call the functions
   makeButton();
