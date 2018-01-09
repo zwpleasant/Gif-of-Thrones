@@ -21,6 +21,7 @@ $(document).ready(function() {
     var gifSearch = $("#gif-input").val().trim();
     topics.push(gifSearch);
     displayButtons();
+    loadData();
   });
 
   // create on click function to grab 10 non-animated gif images from the GIPHY API and displays them on the page
