@@ -4,7 +4,8 @@ $(document).ready(function() {
   var topics = ["Jon Snow", "Daenerys Targaryen", "Cersei Lannister", "Jaime Lannister", "Tyrion Lannister", "Arya Stark", "Sansa Stark"];
 
   // use a function to make a button for each of the characters within the topic variable
-  function makeButton() {
+  function displayButtons() {
+    $(".buttons").empty(); // removes old buttons for no repetition
     for (var i = 0; i < topics.length; i++) {
       var charButton = $("<button>");
       charButton.addClass("btn-warning");
@@ -13,6 +14,14 @@ $(document).ready(function() {
       $(".buttons").append(charButton);
     }
   }
+
+  // create a function that adds a new button when typed into the search button
+  $("#add-gif").on("click", function(event) {
+    event.preventDefault();
+    var gifSearch = $("#gif-input").val().trim();
+    topics.push(gifSearch);
+    displayButtons();
+  });
 
   // create on click function to grab 10 non-animated gif images from the GIPHY API and displays them on the page
   function loadData() {
@@ -38,18 +47,18 @@ $(document).ready(function() {
         var results = response.data;
 
         // for loop that will go through searchResults and add the gifs to gifDisplay
-        for (var j = 0; j < results.length; j++) {
+        for (var k = 0; k < results.length; k++) {
           var gifDiv = $("<div class='item'>"); // creates div for each of the ratings and gifs
-          var rating = results[j].rating; // store the rating of the gif
+          var rating = results[k].rating; // store the rating of the gif
           var p = $("<p>").text("Rating: " + rating); // creates a paragraph with rating attached
           var gifImage = $("<img>"); // creates an image tag for the gif result to go into
-          
+
           // add a class and attributes for image animation
           gifImage.addClass("gif");
-          gifImage.attr("src", results[j].images.fixed_height_still.url);
+          gifImage.attr("src", results[k].images.fixed_height_still.url);
           gifImage.attr("data-state","still");
-          gifImage.attr("data-still", results[j].images.fixed_height_still.url);
-          gifImage.attr("data-animate", results[j].images.fixed_height.url);
+          gifImage.attr("data-still", results[k].images.fixed_height_still.url);
+          gifImage.attr("data-animate", results[k].images.fixed_height.url);
 
           // appends paragraph and gif to the gifDiv
           gifDiv.append(p);
@@ -80,7 +89,7 @@ $(document).ready(function() {
   });
 
   // call the functions
-  makeButton();
+  displayButtons();
   loadData();
 
 });
